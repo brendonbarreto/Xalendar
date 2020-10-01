@@ -8,7 +8,7 @@
     xmlns:xalendar="clr-namespace:Xalendar.View.Controls;assembly=Xalendar.View">
     <ScrollView>
         <StackLayout>
-            <xalendar:CalendarView Events="{Binding Events}" />
+            <xalendar:CalendarView Events="{Binding Events}" MonthChanged="OnMonthChanged" />
 
             <Button
                 BackgroundColor="DodgerBlue"
