@@ -99,7 +99,7 @@ namespace Xalendar.View.Controls
             calendarView.RecycleDays(calendarView._monthContainer.Days);
         }
 
-        public event EventHandler MonthChanged;
+        public event EventHandler<MonthRangeEventArgs> MonthChanged;
 
         private readonly MonthContainer _monthContainer;
         private readonly int _numberOfDaysInContainer;
@@ -128,13 +128,15 @@ namespace Xalendar.View.Controls
                 
                 var days = _monthContainer.Days;
                 var monthName = _monthContainer.GetName();
+                var firstDay = _monthContainer.FirstDay;
+                var lastDay = _monthContainer.LastDay;
 
-                return (days, monthName);
+                return (days, monthName, firstDay, lastDay);
             });
 
             MonthName.Text = result.monthName;
             RecycleDays(result.days);
-            MonthChanged?.Invoke(this, EventArgs.Empty);
+            MonthChanged?.Invoke(this, new MonthRangeEventArgs(result.firstDay, result.lastDay));
         }
 
         private async void OnNextMonthClick(object sender, EventArgs e)
@@ -145,13 +147,15 @@ namespace Xalendar.View.Controls
                 
                 var days = _monthContainer.Days;
                 var monthName = _monthContainer.GetName();
+                var firstDay = _monthContainer.FirstDay;
+                var lastDay = _monthContainer.LastDay;
 
-                return (days, monthName);
+                return (days, monthName, firstDay, lastDay);
             });
             
             MonthName.Text = result.monthName;
             RecycleDays(result.days);
-            MonthChanged?.Invoke(this, EventArgs.Empty);
+            MonthChanged?.Invoke(this, new MonthRangeEventArgs(result.firstDay, result.lastDay));
         }
 
         private void RecycleDays(IReadOnlyList<Day?> days)
@@ -170,6 +174,18 @@ namespace Xalendar.View.Controls
                 if (view.FindByName<Label>("DayElement") is {} dayElement)
                     dayElement.Text = day?.ToString();
             }
+        }
+    }
+
+    public class MonthRangeEventArgs : EventArgs
+    {
+        public DateTime Start { get; }
+        public DateTime End { get; }
+
+        public MonthRangeEventArgs(DateTime start, DateTime end)
+        {
+            Start = start;
+            End = end;
         }
     }
 }
