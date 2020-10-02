@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using Xalendar.Api.Extensions;
 
 namespace Xalendar.Api.Models
@@ -14,7 +15,9 @@ namespace Xalendar.Api.Models
         private IReadOnlyList<Day?>? _days;
         public IReadOnlyList<Day?> Days => _days ??= GetDaysOfContainer();
         public IReadOnlyList<string> DaysOfWeek { get; }
-        
+
+        public DateTime FirstDay => Days.First(day => day is {})!.DateTime;
+
         public MonthContainer(DateTime dateTime)
         {
             _month = new Month(dateTime);
